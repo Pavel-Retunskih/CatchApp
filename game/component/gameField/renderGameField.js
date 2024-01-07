@@ -8,7 +8,7 @@ export function renderGameField() {
         row.classList.add('row')
         container.append(row)
         for (let x = 0; x < newGameSettings.grid.x; x++) {
-            row.append(createCell())
+            row.append(createCell(x,y))
         }
     }
     return container

@@ -12,6 +12,23 @@ export const newGameSettings={
     misses: null
 }
 
+export let offer = {
+    position:{
+        curent:{
+            x: 0,
+            y: 0,
+        },
+        caugth:{
+            x: 1,
+            y: 1,
+        },
+        miss:{
+            x: 2,
+            y: 2,
+        }
+    }
+}
+
 export function getNewGameSettigs(){
     let fieldSize = document.querySelector('.grid-size');
     let winPoints = document.querySelector('.points-to-win');
