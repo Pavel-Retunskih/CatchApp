@@ -29,3 +29,12 @@ export function getNewGameSettigs(){
     console.log(newGameSettings);
     return newGameSettings;
 }
+
+let subscribers = null;
+
+
+
+export function notifySubscriber(newSubscriber){
+    subscribers = newSubscriber;
+   console.log(subscribers);
+}
