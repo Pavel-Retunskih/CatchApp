@@ -96,5 +96,6 @@ export const settings = {
         9,
         11,
         13
-    ]
+    ],
+    muted: false,
 }
