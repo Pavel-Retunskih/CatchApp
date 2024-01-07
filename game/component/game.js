@@ -13,6 +13,7 @@ let startButton = document.createElement('button');
     startButton.append('START GAME');
 
     startButton.addEventListener('click', () => {
+        startButton.style.display = 'none'
         gameFieldContainer.innerHTML='';
         gameFieldContainer.append(startNewGame());
     })
