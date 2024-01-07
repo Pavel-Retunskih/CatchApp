@@ -1,5 +1,5 @@
 export function createCell() {
     let singleCell = document.createElement('div');
-    singleCell.classList.adď('cell');
-    
+    singleCell.classList.add('cell')
+    return singleCell;
 }

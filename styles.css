@@ -8,6 +8,12 @@ body{
 
 }
 
+.cell{
+    width: 80px;
+    height: 80px;
+    border: 2px solid blue;
+}
+
 .game-wrapp{
     margin: 0 auto;
     max-width: 1152px;
