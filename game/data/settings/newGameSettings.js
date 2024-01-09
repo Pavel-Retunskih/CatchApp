@@ -6,7 +6,7 @@ export const OFFER_STATUSES = {
     caught: 'caught'
 }
 
-export const GAME_STATUSES = {
+export let GAME_STATUSES = {
     start: 'start',
     play: 'play',
     lose: 'lose',
@@ -76,7 +76,7 @@ export function runOffer() {
         missOffer()
         moveOfferToRandomPosition()
         notify()
-    }, 1000);
+    }, 2000);
 }
 
 
@@ -97,7 +97,7 @@ function moveOfferToRandomPosition() {
 function missOffer() {
     offer.status = OFFER_STATUSES.miss;
     score.missCount++
-    stopGame(score.missCount)
+    console.log(score.missCount == newGameSettings.misses)
     offer.position.previous = {
         ...offer.position.curent
     };
@@ -110,7 +110,7 @@ function missOffer() {
 export function catchOffer() {
     offer.status = OFFER_STATUSES.caught;
     score.catchCount++;
-    stopGame(score.catchCount);
+    console.log(score.catchCount == newGameSettings.winPoints.points);
     offer.position.previous = {
         ...offer.position.curent
     };
@@ -118,9 +118,7 @@ export function catchOffer() {
         offer.status = OFFER_STATUSES.default;
         notify();
     }, getRandomInt(newGameSettings.cathDelay.min, newGameSettings.cathDelay.max));
-
     moveOfferToRandomPosition();
-    notify()
     clearInterval(stepIntervalId);
     runOffer();
 }
@@ -132,7 +130,6 @@ function getRandomInt(min, max) {
 }
 
 export function newGame() {
-    GAME_STATUSES.curent = 'play'
     getNewGameSettigs()
     let randomIntOfferCoordinatesX = getRandom(newGameSettings.grid.x - 1);
     let randomIntOfferCoordinatesY = getRandom(newGameSettings.grid.y - 1);
@@ -140,7 +137,6 @@ export function newGame() {
     offer.position.curent.y = randomIntOfferCoordinatesY;
     runOffer()
     gameTimerStart()
-    notify()
 }
 
 let gameIntervalId;
@@ -160,15 +156,14 @@ function gameTime(time) {
 }
 
 
-function stopGame(score){
-    if(score === newGameSettings.winPoints){
+function stopGame(sco){
+    console.log(score);
+    if(sco == newGameSettings.winPoints){
         gameTime(timeInSeconds);
-         GAME_STATUSES.curent = 'win'
-         return console.log(newGameSettings);
+         return console.log('Win');
         
-    }else if (score === newGameSettings.misses){
+    }else if (sco == newGameSettings.misses){
         gameTime(timeInSeconds);
-         GAME_STATUSES.curent = 'lose'
-         return console.log(newGameSettings);
+         return console.log('Lose');
         }
 }
