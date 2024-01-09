@@ -7,15 +7,15 @@ export function Game() {
     let gameScorePanel = renderGameScore();
     
     let container = document.createElement('div');
-    let gameFieldContainer = document.createElement('div')
+    let gameFieldContainer = document.createElement('div');
+    gameFieldContainer.classList.add('game-field-wrap');
 
 let startButton = document.createElement('button');
     startButton.append('START GAME');
 
     startButton.addEventListener('click', () => {
         startButton.style.display = 'none'
-        gameFieldContainer.innerHTML='';
-        gameFieldContainer.append(startNewGame());
+        startNewGame();
     })
 
     container.classList.add('game-wrapp');

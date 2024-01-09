@@ -8,9 +8,10 @@ export const OFFER_STATUSES = {
 
 export const GAME_STATUSES = {
     start: 'start',
+    play: 'play',
     lose: 'lose',
     win: 'win',
-    curent: null
+    curent: 'start'
 }
 
 export const newGameSettings = {
@@ -131,6 +132,7 @@ function getRandomInt(min, max) {
 }
 
 export function newGame() {
+    GAME_STATUSES.curent = 'play'
     getNewGameSettigs()
     let randomIntOfferCoordinatesX = getRandom(newGameSettings.grid.x - 1);
     let randomIntOfferCoordinatesY = getRandom(newGameSettings.grid.y - 1);
@@ -138,6 +140,7 @@ export function newGame() {
     offer.position.curent.y = randomIntOfferCoordinatesY;
     runOffer()
     gameTimerStart()
+    notify()
 }
 
 let gameIntervalId;
