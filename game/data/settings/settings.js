@@ -2,33 +2,33 @@ export const settings = {
     gridSize: {
         size3x3: {
             title: '3x3',
-            width: 3,
-            height: 3
+            x: 3,
+            y: 3
         },
         size4x4: {
             title: '4x4',
-            width: 4,
-            height: 4
+            x: 4,
+            y: 4
         },
         size5x5: {
             title: '5x5',
-            width: 5,
-            height: 5
+            x: 5,
+            y: 5
         },
         size6x6: {
             title: '6x6',
-            width: 6,
-            height: 6
+            x: 6,
+            y: 6
         },
         size7x7: {
             title: '7x7',
-            width: 7,
-            height: 7
+            x: 7,
+            y: 7
         },
         size8x8: {
             title: '8x8',
-            width: 8,
-            height: 8
+            x: 8,
+            y: 8
         },
     },
     winPoints: {

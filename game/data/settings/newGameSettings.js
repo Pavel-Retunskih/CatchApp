@@ -1,18 +1,25 @@
 import { settings } from "./settings.js"
-import {score} from '../score/score.js'
+import { score } from '../score/score.js'
 export const OFFER_STATUSES = {
     default: 'default',
     miss: 'miss',
     caught: 'caught'
 }
 
-export const newGameSettings={
-    grid:{
+export const GAME_STATUSES = {
+    start: 'start',
+    lose: 'lose',
+    win: 'win',
+    curent: null
+}
+
+export const newGameSettings = {
+    grid: {
         x: null,
         y: null,
     },
     winPoints: null,
-    cathDelay:{
+    cathDelay: {
         max: null,
         min: null,
     },
@@ -20,12 +27,12 @@ export const newGameSettings={
 }
 
 export let offer = {
-    position:{
-        curent:{
-            x: 0,
-            y: 0,
+    position: {
+        curent: {
+            x: getRandomInt(newGameSettings.grid.x, newGameSettings.grid.x),
+            y: getRandomInt(newGameSettings.grid.y, newGameSettings.grid.y),
         },
-        previous:{
+        previous: {
             x: 0,
             y: 0,
         }
@@ -33,18 +40,18 @@ export let offer = {
     status: 'default'
 }
 
-export function getNewGameSettigs(){
-    let fieldSize = document.querySelector('.grid-size');
-    let winPoints = document.querySelector('.points-to-win');
-    let catchDelay = document.querySelector('.catch-delay');
+
+
+export function getNewGameSettigs() {
+    let fieldSize = document.querySelector('.grid-size').value;
+    let winPoints = document.querySelector('.points-to-win').value;
+    let catchDelay = document.querySelector('.catch-delay').value;
     let maxMisses = document.querySelector('.max-misses');
     console.clear()
 
-    newGameSettings.grid.x = settings.gridSize[fieldSize.value].width;
-    newGameSettings.grid.y = settings.gridSize[fieldSize.value].height;
-    newGameSettings.winPoints = settings.winPoints[winPoints.value].points;
-    newGameSettings.cathDelay.min = settings.catchDelay[catchDelay.value].min;
-    newGameSettings.cathDelay.max = settings.catchDelay[catchDelay.value].max;
+    newGameSettings.grid = { ...settings.gridSize[fieldSize] };
+    newGameSettings.winPoints = { ...settings.winPoints[winPoints] };
+    newGameSettings.cathDelay = { ...settings.catchDelay[catchDelay] };
     newGameSettings.misses = +maxMisses.value;
     return newGameSettings;
 }
@@ -57,7 +64,7 @@ function notify() {
 }
 
 
-export function subscribe(newSubscriber){
+export function subscribe(newSubscriber) {
     subscribers.push(newSubscriber);
 }
 
@@ -77,20 +84,19 @@ function getRandom(N) {
 }
 function moveOfferToRandomPosition() {
     let newX = null;
-    let newY = null; 
+    let newY = null;
     do {
-         newX = getRandom(newGameSettings.grid.x - 1);
-         newY = getRandom(newGameSettings.grid.y - 1);
-    } while ( newGameSettings.grid.x === newX && newGameSettings.grid.y === newY)
+        newX = getRandom(newGameSettings.grid.x - 1);
+        newY = getRandom(newGameSettings.grid.y - 1);
+    } while (newGameSettings.grid.x === newX && newGameSettings.grid.y === newY)
 
     offer.position.curent.x = newX;
     offer.position.curent.y = newY;
 }
 function missOffer() {
-    
     offer.status = OFFER_STATUSES.miss;
     score.missCount++
-
+    stopGame(score.missCount)
     offer.position.previous = {
         ...offer.position.curent
     };
@@ -101,11 +107,9 @@ function missOffer() {
 }
 
 export function catchOffer() {
-    if(score.catchCount === newGameSettings.winPoints){
-        console.log('Win');
-    }
     offer.status = OFFER_STATUSES.caught;
     score.catchCount++;
+    stopGame(score.catchCount);
     offer.position.previous = {
         ...offer.position.curent
     };
@@ -126,8 +130,42 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function newGame(){
+export function newGame() {
     getNewGameSettigs()
+    let randomIntOfferCoordinatesX = getRandom(newGameSettings.grid.x - 1);
+    let randomIntOfferCoordinatesY = getRandom(newGameSettings.grid.y - 1);
+    offer.position.curent.x = randomIntOfferCoordinatesX;
+    offer.position.curent.y = randomIntOfferCoordinatesY;
     runOffer()
-   
+    gameTimerStart()
+}
+
+let gameIntervalId;
+let timeInSeconds = 0;
+function gameTimerStart() {
+    gameIntervalId = setInterval(() => {
+        timeInSeconds++
+    }, 1000);
+
+}
+
+function gameTime(time) {
+    let gameTimeMinutes = (time/60).toFixed(2).split('.')[0];
+    let gameTimeSeconds = (time/60).toFixed(2).split('.')[1];
+    newGameSettings.fullGameTime = `${gameTimeMinutes}m ${gameTimeSeconds}s`;
+    clearInterval(gameIntervalId)
+}
+
+
+function stopGame(score){
+    if(score === newGameSettings.winPoints){
+        gameTime(timeInSeconds);
+         GAME_STATUSES.curent = 'win'
+         return console.log(newGameSettings);
+        
+    }else if (score === newGameSettings.misses){
+        gameTime(timeInSeconds);
+         GAME_STATUSES.curent = 'lose'
+         return console.log(newGameSettings);
+        }
 }
