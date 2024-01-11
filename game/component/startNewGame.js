@@ -1,14 +1,16 @@
 import { win } from "../data/gameRules/rules.js";
-import {newGame} from "../data/settings/newGameSettings.js";
+import { GAME_STATUSES } from "../data/gameStatuses/GameStatuses.js";
+import { newGame } from "../data/settings/newGameSettings.js";
 import { renderGameField } from "./gameField/renderGameField.js";
 
 
-export function startNewGame(){
-    win()
-    newGame();
-    let container = document.querySelector('.game-field-wrap');
-    let gameField = renderGameField()
-    container.append(gameField)
-    
-    return container
+export function startNewGame(container) {
+    if (GAME_STATUSES.curent == GAME_STATUSES.play) {
+        let container = document.getElementById('game-field-wrap')
+        container.innerHTML = ''
+        win()
+        newGame();
+        let gameField = renderGameField()
+        return container.append(gameField)
+    }
 }
