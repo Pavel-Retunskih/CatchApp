@@ -21,8 +21,8 @@ export function update(x, y, singleCell) {
         const offerImg = document.createElement('img');
         offerImg.classList.add('offer-img');
         offerImg.src = './game/component/img/Offer_default.png';
-        offerImg.addEventListener('click', catchOffer)
         singleCell.append(offerImg)
+        offerImg.addEventListener('click', catchOffer)
     }
     if (offer.status === OFFER_STATUSES.caught && offer.position.previous.y === y && offer.position.previous.x === x) {
         const offerImg = document.createElement('img');

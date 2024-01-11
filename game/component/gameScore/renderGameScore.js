@@ -1,10 +1,10 @@
-import {score} from '../../data/score/score.js';
-import { newGameSettings, subscribe } from '../../data/settings/newGameSettings.js';
+import {score, subscribeToScore} from '../../data/score/score.js';
+import { subscribe } from '../../data/settings/newGameSettings.js';
 
 
 export function renderGameScore(){
 
-    subscribe(()=>{
+    subscribeToScore(()=>{
         container.innerHTML = '';
         update(container)
         

@@ -1,5 +1,5 @@
 import { settings } from "./settings.js"
-import { score } from '../score/score.js'
+import { score, scoreCatchCountIncrement, scoreMissCountIncrement } from '../score/score.js'
 export const OFFER_STATUSES = {
     default: 'default',
     miss: 'miss',
@@ -24,7 +24,8 @@ export const newGameSettings = {
         max: null,
         min: null,
     },
-    misses: null
+    misses: null,
+    gameStatus: null,
 }
 
 export let offer = {
@@ -40,7 +41,7 @@ export let offer = {
     },
     status: 'default'
 }
-
+export const endGameStatistic = {};
 
 
 export function getNewGameSettigs() {
@@ -76,13 +77,15 @@ export function runOffer() {
         missOffer()
         moveOfferToRandomPosition()
         notify()
-    }, 2000);
-}
+    }, 2000)
+};
+
 
 
 function getRandom(N) {
     return Math.floor(Math.random() * (N + 1));
 }
+
 function moveOfferToRandomPosition() {
     let newX = null;
     let newY = null;
@@ -96,8 +99,7 @@ function moveOfferToRandomPosition() {
 }
 function missOffer() {
     offer.status = OFFER_STATUSES.miss;
-    score.missCount++
-    console.log(score.missCount == newGameSettings.misses)
+    scoreMissCountIncrement()
     offer.position.previous = {
         ...offer.position.curent
     };
@@ -109,8 +111,7 @@ function missOffer() {
 
 export function catchOffer() {
     offer.status = OFFER_STATUSES.caught;
-    score.catchCount++;
-    console.log(score.catchCount == newGameSettings.winPoints.points);
+    scoreCatchCountIncrement()
     offer.position.previous = {
         ...offer.position.curent
     };
@@ -120,6 +121,7 @@ export function catchOffer() {
     }, getRandomInt(newGameSettings.cathDelay.min, newGameSettings.cathDelay.max));
     moveOfferToRandomPosition();
     clearInterval(stepIntervalId);
+    notify();
     runOffer();
 }
 
@@ -139,31 +141,21 @@ export function newGame() {
     gameTimerStart()
 }
 
-let gameIntervalId;
+let gameTimerIntervalId;
 let timeInSeconds = 0;
 function gameTimerStart() {
-    gameIntervalId = setInterval(() => {
+    gameTimerIntervalId = setInterval(() => {
         timeInSeconds++
     }, 1000);
 
 }
 
-function gameTime(time) {
-    let gameTimeMinutes = (time/60).toFixed(2).split('.')[0];
-    let gameTimeSeconds = (time/60).toFixed(2).split('.')[1];
-    newGameSettings.fullGameTime = `${gameTimeMinutes}m ${gameTimeSeconds}s`;
-    clearInterval(gameIntervalId)
+function getFullGameTime(time) {
+    let gameTimeMinutes = (time / 60).toFixed(2).split('.')[0];
+    let gameTimeSeconds = (time / 60).toFixed(2).split('.')[1];
+    let fullGameTime = `${gameTimeMinutes}m ${gameTimeSeconds}s`;
+    clearInterval(gameTimerIntervalId);
+    return fullGameTime;
 }
 
 
-function stopGame(sco){
-    console.log(score);
-    if(sco == newGameSettings.winPoints){
-        gameTime(timeInSeconds);
-         return console.log('Win');
-        
-    }else if (sco == newGameSettings.misses){
-        gameTime(timeInSeconds);
-         return console.log('Lose');
-        }
-}

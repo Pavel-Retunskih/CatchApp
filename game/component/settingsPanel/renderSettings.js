@@ -5,6 +5,7 @@ import {createMaxMissesSelect} from './missesSelect/createMissesSelect.js'
 
 export function renderSettings() {
     const container = document.createElement('div');
+    container.classList.add('settings-panel')
     const sizeSelectElement = createSizeSelect();
     const pointsToWinSelectElement = createPointsToWinSelect();
     const catchDelayElement = createCatchDelaySelect();
