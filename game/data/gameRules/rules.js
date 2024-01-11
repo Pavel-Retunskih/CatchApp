@@ -1,4 +1,3 @@
-import { startNewGame } from "../../component/startNewGame.js";
 import { score, subscribeToScore } from "../score/score.js";
 import { getFullGameTime, newGameSettings, stopGame, } from "../settings/newGameSettings.js";
 
