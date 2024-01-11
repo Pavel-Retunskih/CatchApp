@@ -1,11 +1,11 @@
-import { Game } from './game/component/game.js'
+import { playTheGame } from './game/component/game.js'
 
 function renderGame() {
     const root = document.getElementById('root');
     root.innerHTML = '';
 
-    let renderGame = Game();
-    root.append(renderGame);
+    let game = playTheGame();
+    root.append(game);
 }
 
 renderGame()

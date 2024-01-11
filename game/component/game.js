@@ -1,29 +1,16 @@
-import { renderSettings } from './settingsPanel/renderSettings.js'
-import { renderGameScore } from './gameScore/renderGameScore.js'
-import { startNewGame } from './startNewGame.js';
+import { subscribeToGameStatus } from "../data/gameStatuses/GameStatuses.js";
+import { GameStartDialog } from "./GameStartDialog/gameStartDialog.js";
+import { renderEndGameDialog } from "./WinLoseDialog/renderWinLoseDialog.js";
 
-export function Game() {
-    let settingsPanel = renderSettings();
-    let gameScorePanel = renderGameScore();
-    
-    let container = document.createElement('div');
-    container.classList.add('game-wrapp');
-    let gameFieldContainer = document.createElement('div');
-    gameFieldContainer.classList.add('game-field-wrap');
-
-let startButton = document.createElement('button');
-    startButton.append('START GAME');
-
-    startButton.addEventListener('click', () => {
-        startButton.style.display = 'none'
-        startNewGame();
+export function playTheGame() {
+    subscribeToGameStatus(()=>{
+        GameStartDialog(container)
+        renderEndGameDialog(container)
     })
+    let container = document.createElement('div');
+        container.classList.add('game-wrapp');
 
-    
-    container.append(settingsPanel);
-    container.append(gameScorePanel);
-    container.append(startButton);
-    container.append(gameFieldContainer);
-
+    GameStartDialog(container)
     return container;
 }
+
