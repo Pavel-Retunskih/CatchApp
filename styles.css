@@ -24,4 +24,24 @@
 .game-wrapp{
     margin: 0 auto;
     max-width: 1152px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.settings-panel{
+    display: flex;
+    justify-content: space-around;
+}
+
+select{
+    width: 350px;
+    background-color: blue;
+    border: 2px solid green;
+}
+
+.game-field-wrap{
+    display: flex;
+
+    justify-content: center;
 }

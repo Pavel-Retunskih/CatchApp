@@ -11,6 +11,7 @@ export function renderGameScore(){
     })
     
     let container = document.createElement('div');
+    container.classList.add('score-panel')
     
     update(container);
    

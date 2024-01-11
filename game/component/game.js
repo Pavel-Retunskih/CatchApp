@@ -7,6 +7,7 @@ export function Game() {
     let gameScorePanel = renderGameScore();
     
     let container = document.createElement('div');
+    container.classList.add('game-wrapp');
     let gameFieldContainer = document.createElement('div');
     gameFieldContainer.classList.add('game-field-wrap');
 
@@ -18,7 +19,7 @@ let startButton = document.createElement('button');
         startNewGame();
     })
 
-    container.classList.add('game-wrapp');
+    
     container.append(settingsPanel);
     container.append(gameScorePanel);
     container.append(startButton);

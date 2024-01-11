@@ -1,23 +1,64 @@
+import { startNewGame } from "../../component/startNewGame.js";
+import { score, subscribeToScore } from "../score/score.js";
+import { getFullGameTime, newGameSettings, stopGame, } from "../settings/newGameSettings.js";
 
-import { subscribeToScore } from "../score/score.js";
-import { GAME_STATUSES, endGameStatistic, newGameSettings,} from "../settings/newGameSettings.js";
-
-export function win(){
-    subscribeToScore(()=>{
+export function win() {
+    subscribeToScore(() => {
         winlose()
+        gameResult(score)
     })
 }
 
+export const GAME_STATUSES = {
+    start: 'start',
+    play: 'play',
+    lose: 'lose',
+    win: 'win',
+    curent: 'start'
+}
+
 function winlose() {
-    if(newGameSettings.gameStatus == GAME_STATUSES.win || newGameSettings.gameStatus == GAME_STATUSES.lose){
+    if (newGameSettings.gameStatus == GAME_STATUSES.win || newGameSettings.gameStatus == GAME_STATUSES.lose) {
+        stopGame()
+    }
+
+}
+
+
+function gameResult(score) {
+    if (score.catchCount == newGameSettings.winPoints.points) {
+        const title = 'You Win!';
+        const messadge = 'Congratulations';
+        newGameSettings.gameStatus = GAME_STATUSES.win;
+        setEndGameStatistic(endGameStatistic, title, messadge)
+        renderEndGameDialog()
+    } else if (score.missCount == newGameSettings.misses) {
+        const title = 'You Lose!';
+        const messadge = 'You\'ll be lucky next time';
+        newGameSettings.gameStatus = GAME_STATUSES.lose;
+        setEndGameStatistic(endGameStatistic, title, messadge)
         renderEndGameDialog()
     }
-    
 }
-function renderEndGameDialog(){
-    let root = document.getElementById('root')
+
+export const endGameStatistic = {};
+
+function setEndGameStatistic(obj, title, messadge) {
+    obj.fullGameTime = getFullGameTime();
+    obj.score = { ...score }
+    obj.title = title
+    obj.subtitle = messadge
+    return obj
+}
+
+function renderEndGameDialog() {
+    const root = document.getElementById('root')
     root.innerHTML = '';
-    const container = document.createElement('div');
+    const gameContainer = document.createElement('div');
+    gameContainer.classList.add('game-wrapp');
+
+    const dialogContainer = document.createElement('div');
+    dialogContainer.classList.add('dialog-wrapp')
 
     const title = document.createElement('h1');
     title.innerText = endGameStatistic.title
@@ -48,24 +89,22 @@ function renderEndGameDialog(){
     const totalTimeCount = document.createElement('p')
     totalTimeCount.innerText = endGameStatistic.fullGameTime
     totalTimeContainer.append(totalTimeTitle, totalTimeCount)
-    
+
     const button = document.createElement('button');
     button.innerText = 'Play again'
-    
-    
+
+
     resultsContainer.append(catchContainer, missContainer, totalTimeContainer)
 
-    container.append(title)
-    container.append(subTitle)
-    container.append(resultsContainer)
-    container.append(button)
-    root.append(container)
+    dialogContainer.append(title)
+    dialogContainer.append(subTitle)
+    dialogContainer.append(resultsContainer)
+    dialogContainer.append(button)
+    gameContainer.append(dialogContainer)
+    root.append(gameContainer)
 
-    button.addEventListener('click', ()=>{
-        
+    button.addEventListener('click', () => {
+        startNewGame()
     })
     return root;
 }
-
-
-
