@@ -91,45 +91,46 @@ function moveOfferToRandomPosition() {
     let newX = getRandom(newGameSettings.grid.x - 1);
     let newY = getRandom(newGameSettings.grid.y - 1);
 
-    if (newGameSettings.grid.x === newX && newGameSettings.grid.y === newY) {
+    if (offer.position.curent.x === newX && offer.position.curent.y === newY) {
         moveOfferToRandomPosition()
+    } else {
+        offer.position.curent.x = newX;
+        offer.position.curent.y = newY;
     }
-    offer.position.curent.x = newX;
-    offer.position.curent.y = newY;
-    
 
 }
 function missOffer() {
-        offer.status = OFFER_STATUSES.miss;
-        scoreMissCountIncrement()
-        offer.position.previous = {
-            ...offer.position.curent
-        };
-        setTimeout(() => {
-            offer.status = OFFER_STATUSES.default;
-            notify();
-        }, 200);
-        console.log('miss');
-        if (GAME_STATUSES.curent == GAME_STATUSES.lose || GAME_STATUSES.curent == GAME_STATUSES.win){
-            clearInterval(stepIntervalId);
-        };
+    if (GAME_STATUSES.curent == GAME_STATUSES.lose || GAME_STATUSES.curent == GAME_STATUSES.win) {
+        clearInterval(stepIntervalId);
+    };
+    offer.status = OFFER_STATUSES.miss;
+    scoreMissCountIncrement()
+    offer.position.previous = {
+        ...offer.position.curent
+    };
+    setTimeout(() => {
+        offer.status = OFFER_STATUSES.default;
+        notify();
+    }, 200);
+    console.log('miss');
+
 }
 
 export function catchOffer() {
-        offer.status = OFFER_STATUSES.caught;
-        scoreCatchCountIncrement()
-        offer.position.previous = {
-            ...offer.position.curent
-        };
-        setTimeout(() => {
-            offer.status = OFFER_STATUSES.default;
-            notify();
-        }, 200);
-        moveOfferToRandomPosition();
-        clearInterval(stepIntervalId);
-        runOffer();
+    offer.status = OFFER_STATUSES.caught;
+    scoreCatchCountIncrement()
+    offer.position.previous = {
+        ...offer.position.curent
+    };
+    setTimeout(() => {
+        offer.status = OFFER_STATUSES.default;
         notify();
-        console.log('caugth');
+    }, 200);
+    moveOfferToRandomPosition();
+    clearInterval(stepIntervalId);
+    runOffer();
+    notify();
+    console.log('caugth');
 }
 
 function getRandomInt(min, max) {
@@ -146,13 +147,13 @@ function gameTimerStart() {
     gameTimerIntervalId = setInterval(() => {
         gameTimeInSec++
     }, 1000);
-    
+
 }
 
 export function getFullGameTime() {
     let time = gameTimeInSec;
     console.log(`Game time in sec: ${time}`);
-    let fullGameTime = `${Math.floor(time/60)}m ${time - (Math.floor(time/60) * 60)}s`
+    let fullGameTime = `${Math.floor(time / 60)}m ${time - (Math.floor(time / 60) * 60)}s`
     clearInterval(gameTimerIntervalId);
     return fullGameTime;
 }
