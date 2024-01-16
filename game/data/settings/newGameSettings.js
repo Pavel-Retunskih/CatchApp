@@ -82,22 +82,22 @@ export function runOffer() {
         missOffer()
         moveOfferToRandomPosition()
         notify()
-    }, 2000000)
+    }, 2000)
 
 };
 
 
 function moveOfferToRandomPosition() {
-    let newX = null;
-    let newY = null;
+    let newX = getRandom(newGameSettings.grid.x - 1);
+    let newY = getRandom(newGameSettings.grid.y - 1);
+
     if (newGameSettings.grid.x === newX && newGameSettings.grid.y === newY) {
         moveOfferToRandomPosition()
     }
-    newX = getRandom(newGameSettings.grid.x - 1);
-    newY = getRandom(newGameSettings.grid.y - 1);
-    
     offer.position.curent.x = newX;
     offer.position.curent.y = newY;
+    
+
 }
 function missOffer() {
         offer.status = OFFER_STATUSES.miss;

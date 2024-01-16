@@ -5,7 +5,7 @@ export function createPointsToWinSelect(){
     const labelForPontsToWinSelect = document.createElement('label');
     labelForPontsToWinSelect.setAttribute('for', 'points-to-win-select')
     labelForPontsToWinSelect.setAttribute('autofocus', 'true')
-    labelForPontsToWinSelect.innerText = 'Points to winh'
+    labelForPontsToWinSelect.innerText = 'Points to win'
 
     const pontsToWinSelectElement = document.createElement('select');
     pontsToWinSelectElement.setAttribute('id', 'points-to-win-select')
