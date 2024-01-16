@@ -1,5 +1,6 @@
 import { settings } from "./settings.js"
 import { scoreCatchCountIncrement, scoreMissCountIncrement } from '../score/score.js'
+import { GAME_STATUSES } from "../gameStatuses/GameStatuses.js";
 
 //****************** Selected settings for a new game *****************/
 export const newGameSettings = {
@@ -74,65 +75,61 @@ export function subscribe(newSubscriber) {
 //*********************************************************************/
 
 
-let stepIntervalId;
+export let stepIntervalId;
 
 export function runOffer() {
     stepIntervalId = setInterval(() => {
         missOffer()
         moveOfferToRandomPosition()
         notify()
-    }, 2000)
+    }, 2000000)
 
 };
 
-function getRandom(N) {
-    return Math.floor(Math.random() * (N + 1));
-}
 
 function moveOfferToRandomPosition() {
     let newX = null;
     let newY = null;
-    do {
-        newX = getRandom(newGameSettings.grid.x - 1);
-        newY = getRandom(newGameSettings.grid.y - 1);
-    } while (newGameSettings.grid.x === newX && newGameSettings.grid.y === newY)
-
+    if (newGameSettings.grid.x === newX && newGameSettings.grid.y === newY) {
+        moveOfferToRandomPosition()
+    }
+    newX = getRandom(newGameSettings.grid.x - 1);
+    newY = getRandom(newGameSettings.grid.y - 1);
+    
     offer.position.curent.x = newX;
     offer.position.curent.y = newY;
 }
 function missOffer() {
-    if(!newGameSettings.gameStatus){
-    offer.status = OFFER_STATUSES.miss;
-    scoreMissCountIncrement()
-    console.log('miss');
-    offer.position.previous = {
-        ...offer.position.curent
-    };
-    setTimeout(() => {
-        offer.status = OFFER_STATUSES.default;
-        notify();
-    }, 200);
-}
+        offer.status = OFFER_STATUSES.miss;
+        scoreMissCountIncrement()
+        offer.position.previous = {
+            ...offer.position.curent
+        };
+        setTimeout(() => {
+            offer.status = OFFER_STATUSES.default;
+            notify();
+        }, 200);
+        console.log('miss');
+        if (GAME_STATUSES.curent == GAME_STATUSES.lose || GAME_STATUSES.curent == GAME_STATUSES.win){
+            clearInterval(stepIntervalId);
+        };
 }
 
 export function catchOffer() {
-    if(!newGameSettings.gameStatus){
-    offer.status = OFFER_STATUSES.caught;
-    scoreCatchCountIncrement()
-    offer.position.previous = {
-        ...offer.position.curent
-    };
-    setTimeout(() => {
-        offer.status = OFFER_STATUSES.default;
-        notify();
-    }, 200);
-    moveOfferToRandomPosition();
-    clearInterval(stepIntervalId);
-    notify();
-    
+        offer.status = OFFER_STATUSES.caught;
+        scoreCatchCountIncrement()
+        offer.position.previous = {
+            ...offer.position.curent
+        };
+        setTimeout(() => {
+            offer.status = OFFER_STATUSES.default;
+            notify();
+        }, 200);
+        moveOfferToRandomPosition();
+        clearInterval(stepIntervalId);
         runOffer();
-    }
-    
+        notify();
+        console.log('caugth');
 }
 
 function getRandomInt(min, max) {
@@ -142,26 +139,27 @@ function getRandomInt(min, max) {
 }
 
 
-
+//**************************Game time cuonter in sec */
 let gameTimerIntervalId;
 let gameTimeInSec = 0;
 function gameTimerStart() {
     gameTimerIntervalId = setInterval(() => {
-        gameTimeInSec++ 
+        gameTimeInSec++
     }, 1000);
-
+    
 }
 
 export function getFullGameTime() {
     let time = gameTimeInSec;
-    console.log(`Game timer in sec: ${time}`);
-    let gameTimeMinutes = (time / 60).toFixed(2).split('.')[0];
-    let gameTimeSeconds = (time / 60).toFixed(2).split('.')[1];
-    let fullGameTime = `${gameTimeMinutes}m ${gameTimeSeconds}s`;
+    console.log(`Game time in sec: ${time}`);
+    let fullGameTime = `${Math.floor(time/60)}m ${time - (Math.floor(time/60) * 60)}s`
     clearInterval(gameTimerIntervalId);
     return fullGameTime;
 }
-
+//***************************************************/
 export function stopGame() {
     clearInterval(stepIntervalId)
+}
+function getRandom(N) {
+    return Math.floor(Math.random() * (N + 1));
 }

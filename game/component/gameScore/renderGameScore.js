@@ -1,3 +1,4 @@
+import { GAME_STATUSES } from '../../data/gameStatuses/GameStatuses.js';
 import {score, subscribeToScore} from '../../data/score/score.js';
 
 
@@ -18,8 +19,11 @@ export function renderGameScore(){
 }
 
 function update(containerElement){
-   
-   return containerElement.append(`Catch:${score.catchCount} Miss: ${score.missCount}`);
+   if(GAME_STATUSES.curent == GAME_STATUSES.start){
+    score.catchCount = 0
+    score.missCount = 0
+   }
+   return containerElement.append(`Catch: ${score.catchCount} Miss: ${score.missCount}`);
    
 }
     

@@ -16,7 +16,6 @@ export function scoreCatchCountIncrement(){
 let subscribers = [];
 
 function notify() {
-    console.log(subscribers);
     subscribers.forEach(subscriber => subscriber())
 }
 

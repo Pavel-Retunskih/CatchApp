@@ -9,7 +9,6 @@ export const GAME_STATUSES = {
 let subscribers = [];
 
 export function changeGameStatus(newStatus){
-    console.log(GAME_STATUSES.curent);
     GAME_STATUSES.curent = newStatus;
     notifySubscribersOfGameStatus()
 }
