@@ -128,7 +128,9 @@ export function catchOffer() {
     }, 200);
     moveOfferToRandomPosition();
     clearInterval(stepIntervalId);
-    runOffer();
+    if (GAME_STATUSES.curent == GAME_STATUSES.play){
+        runOffer();
+    }    
     notify();
     console.log('caugth');
 }
